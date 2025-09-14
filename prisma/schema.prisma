@@ -32,6 +32,17 @@ model Couple {
   user2Id Int
   createdAt DateTime @default(now())
 
+  dates Date[]
+
   @@unique([user1Id, user2Id])
+}
+
+model Date {
+  id Int @default(autoincrement()) @id
+  couple Couple @relation(fields: [coupleId], references: [id])
+  coupleId Int
+  date DateTime
+  description String?
+  createdAt DateTime @default(now())
 }
 
