@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, NotFoundException, Param, Post } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger";
 import { User } from "./entities/user.entity";
 
 @Controller('users')
@@ -13,6 +13,20 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Lista de usuários retornada com sucesso.', type: [User] })
   async findAll(): Promise<User[]> {
     return this.userService.getAllUsers();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Obter um usuário por ID' })
+  @ApiParam({ name: 'id', description: 'ID do usuário', example: 1, type: Number })
+  @ApiResponse({ status: 200, description: 'Usuário encontrado.', type: User })
+  @ApiResponse({ status: 404, description: 'Usuário não encontrado.' })
+  async getById(@Param('id') id: number): Promise<User | null> {
+    const user = await this.userService.getById(id);
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+    return user;
   }
 
   @Post()

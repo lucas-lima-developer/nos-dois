@@ -17,6 +17,14 @@ export class UserService {
     }
   }
 
+  async getById(id: number): Promise<User | null> {
+    try {
+      return await this.prisma.user.findFirst({ where: { id } });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createUser(data: CreateUserDto): Promise<User> {
     try {
       return await this.prisma.user.create({ data });
