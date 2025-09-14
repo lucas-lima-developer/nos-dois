@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiResponse } from "@nestjs/swagger";
@@ -47,6 +47,14 @@ export class UserController {
     const user = await this.userService.updateUser(id, data);
 
     return user;
-    // Implementar lógica de atualização
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Excluir um usuário existente' })
+  @ApiParam({ name: 'id', description: 'ID do usuário a ser excluído', example: 1, type: Number })
+  @ApiResponse({ status: 200, description: 'Usuário excluído com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Usuário não encontrado.' })
+  async delete(@Param('id') id: number): Promise<void> {
+    await this.userService.deleteUser(id);
   }
 }

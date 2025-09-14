@@ -52,4 +52,15 @@ export class UserService {
       throw error;
     }
   }
+
+  async deleteUser(id: number): Promise<void> {
+    try {
+      await this.prisma.user.delete({ where: { id } });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new NotFoundException('Usuário não encontrado.');
+      }
+      throw error;
+    }
+  }
 }
