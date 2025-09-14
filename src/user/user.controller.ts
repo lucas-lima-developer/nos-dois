@@ -8,6 +8,13 @@ import { User } from "./entities/user.entity";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get()
+  @ApiOperation({ summary: 'Listar todos os usuários' })
+  @ApiResponse({ status: 200, description: 'Lista de usuários retornada com sucesso.', type: [User] })
+  async findAll(): Promise<User[]> {
+    return this.userService.getAllUsers();
+  }
+
   @Post()
   @ApiOperation({ summary: 'Criar um novo usuário' })
   @ApiBody({ type: CreateUserDto })

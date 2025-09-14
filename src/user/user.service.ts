@@ -9,6 +9,14 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
+  async getAllUsers(): Promise<User[]> {
+    try {
+      return await this.prisma.user.findMany();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createUser(data: CreateUserDto): Promise<User> {
     try {
       return await this.prisma.user.create({ data });
