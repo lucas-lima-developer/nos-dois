@@ -11,6 +11,9 @@ export class CoupleService {
     private userService: UserService,
   ) {}
 
+  async getAllCouples(): Promise<Couple[]> {
+    return this.prisma.couple.findMany();
+  }
 
   async createCouple(data: CreateCoupleDto): Promise<Couple> {
     const { user1Id, user2Id } = data;
