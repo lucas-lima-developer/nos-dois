@@ -48,4 +48,19 @@ export class CoupleService {
       data: { user1Id, user2Id },
     });
   }
+
+  async getCoupleByUserId(userId: number): Promise<Couple | null> {
+    const couple = await this.prisma.couple.findFirst({
+      where: {
+        OR: [
+          { user1Id: userId },
+          { user2Id: userId }
+        ]
+      }
+    })
+
+    if (!couple) throw new NotFoundException('Casal não encontrado para o usuário fornecido.');
+
+    return couple;
+  }
 }
