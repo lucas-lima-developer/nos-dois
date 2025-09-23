@@ -49,7 +49,7 @@ export class CoupleService {
     });
   }
 
-  async getCoupleByUserId(userId: number): Promise<Couple | null> {
+  async getCoupleByUserId(userId: number): Promise<Couple> {
     const couple = await this.prisma.couple.findFirst({
       where: {
         OR: [
@@ -62,5 +62,17 @@ export class CoupleService {
     if (!couple) throw new NotFoundException('Casal não encontrado para o usuário fornecido.');
 
     return couple;
+  }
+
+  async deleteCoupleByUserId(userId: number): Promise<void> {
+    try {
+      const couple = await this.getCoupleByUserId(userId);
+
+      await this.prisma.couple.delete({
+        where: { id: couple.id }
+      })
+    } catch(error) {
+      throw error;
+    }
   }
 }

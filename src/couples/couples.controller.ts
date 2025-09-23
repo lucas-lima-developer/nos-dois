@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Param } from "@nestjs/common";
+import { Body, Controller, Post, Get, Param, Delete } from "@nestjs/common";
 import { ApiBody, ApiCreatedResponse, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { CoupleService } from "./couples.service";
 import { CreateCoupleDto } from "./dto/create-couple.dto";
@@ -28,5 +28,12 @@ export class CouplesController {
   @ApiResponse({ type: Couple, description: 'Casal obtido com sucesso.' })
   async findByUserId(@Param('userId') userId: number): Promise<Couple | null> {
     return this.coupleService.getCoupleByUserId(userId);
+  }
+
+  @Delete(':userId')
+  @ApiOperation({ summary: 'Deletar casal por ID de usuário' })
+  @ApiResponse({ status: 204, description: 'Casal deletado com sucesso.' })
+  async deleteByUserId(@Param('userId') userId: number): Promise<void> {
+    return this.coupleService.deleteCoupleByUserId(userId);
   }
 }
