@@ -64,6 +64,12 @@ export class CoupleService {
     return couple;
   }
 
+  async getCoupleById(id: number): Promise<Couple> {
+    const couple = await this.prisma.couple.findUnique({ where: { id } });
+    if (!couple) throw new NotFoundException('Casal não encontrado.');
+    return couple;
+  }
+
   async deleteCoupleByUserId(userId: number): Promise<void> {
     try {
       const couple = await this.getCoupleByUserId(userId);
